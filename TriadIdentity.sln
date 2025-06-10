@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.14.36202.13
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CustomIdentity.Test", "CustomIdentity.Test\CustomIdentity.Test.csproj", "{25CBAF89-624A-4BA7-8278-4820F7FCC28D}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "UI", "UI", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "BLL", "BLL", "{17EAB5B2-2681-4CCD-8C46-7730B14F09A8}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "DAL", "DAL", "{2B4641EE-62F4-44DE-9263-1E6EB2434FCC}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{25CBAF89-624A-4BA7-8278-4820F7FCC28D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25CBAF89-624A-4BA7-8278-4820F7FCC28D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25CBAF89-624A-4BA7-8278-4820F7FCC28D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25CBAF89-624A-4BA7-8278-4820F7FCC28D}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {B07D4C57-DFBA-4252-AF8D-0FDE817DB46E}
+	EndGlobalSection
+EndGlobal
