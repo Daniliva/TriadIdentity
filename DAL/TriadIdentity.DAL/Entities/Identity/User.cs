@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using TriadIdentity.DAL.Entities.Common;
 
 namespace TriadIdentity.DAL.Entities.Identity
 {
-    public class User : IdentityUser<Guid>
+    public class User : IdentityUser<Guid>, IAuditEntity
     {
         public string FirstName { get; set; }
         public string LastName { get; set; }
