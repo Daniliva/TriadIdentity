@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using TriadIdentity.DAL.Entities.Common;
 using TriadIdentity.DAL.Entities.Identity;
+using TriadIdentity.DAL.Interfaces;
 
 namespace TriadIdentity.DAL.Contexts
 {

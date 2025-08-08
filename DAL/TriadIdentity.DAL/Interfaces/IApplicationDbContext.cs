@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using TriadIdentity.DAL.Entities.Common;
 
-namespace TriadIdentity.DAL.Contexts;
+namespace TriadIdentity.DAL.Interfaces;
 
 public interface IApplicationDbContext
 {

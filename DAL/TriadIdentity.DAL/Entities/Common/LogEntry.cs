@@ -1,4 +1,6 @@
-﻿namespace TriadIdentity.DAL.Entities.Common;
+﻿using TriadIdentity.DAL.Interfaces;
+
+namespace TriadIdentity.DAL.Entities.Common;
 
 public class LogEntry :IAuditEntity
 {
@@ -14,10 +16,4 @@ public class LogEntry :IAuditEntity
         Id = Guid.NewGuid();
         CreatedAt = DateTime.UtcNow;
     }
-}
-public interface IAuditEntity
-{
-    DateTime CreatedAt { get; set; }
-
-    DateTime? UpdatedAt { get; set; }
 }
