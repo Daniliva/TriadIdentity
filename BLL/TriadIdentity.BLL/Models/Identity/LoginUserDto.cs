@@ -1,4 +1,6 @@
-﻿namespace TriadIdentity.BLL.Services.Identity;
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace TriadIdentity.BLL.Models.Identity;
 
 public class LoginUserDto
 {
