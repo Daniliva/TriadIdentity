@@ -23,7 +23,6 @@ namespace TriadIdentity.DAL.Contexts
         {
             base.OnModelCreating(builder);
 
-            
             builder.Entity<User>(entity => entity.ToTable("Users"));
             builder.Entity<Role>(entity => entity.ToTable("Roles"));
             builder.Entity<UserRole>(entity => entity.ToTable("UserRoles"));
@@ -40,9 +39,8 @@ namespace TriadIdentity.DAL.Contexts
             builder.ApplyConfigurationsFromAssembly(typeof(ApplicationDbContext).Assembly);
         }
 
-        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        private void ApplyAuditAndLogging()
         {
-            
             foreach (var entry in ChangeTracker.Entries<IAuditEntity>())
             {
                 if (entry.State == EntityState.Added)
@@ -53,10 +51,31 @@ namespace TriadIdentity.DAL.Contexts
                 {
                     entry.Entity.UpdatedAt = DateTime.UtcNow;
                 }
-            }
 
-            
-            _logger.LogInformation("Saving changes to database at {Time}", DateTime.UtcNow);
+                if (entry.State == EntityState.Added || entry.State == EntityState.Modified || entry.State == EntityState.Deleted)
+                {
+                    var entityType = entry.Entity.GetType().Name;
+                    var userId = entry.Entity is User user ? user.Id.ToString() : "System";
+                    var details = entry.Entity is User u
+                        ? $"User {u.Email} {entry.State} at {DateTime.UtcNow}"
+                        : $"{entityType} {entry.State} at {DateTime.UtcNow}";
+
+                    LogEntries.Add(new LogEntry
+                    {
+                        Action = $"{entityType}_{entry.State}",
+                        UserId = userId,
+                        Details = details
+                    });
+
+                    _logger.LogInformation("Entity {EntityType} changed with state {State} at {Time}",
+                        entityType, entry.State, DateTime.UtcNow);
+                }
+            }
+        }
+
+        public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
+        {
+            ApplyAuditAndLogging();
 
             try
             {
@@ -71,19 +90,7 @@ namespace TriadIdentity.DAL.Contexts
 
         public override int SaveChanges()
         {
-            foreach (var entry in ChangeTracker.Entries<IAuditEntity>())
-            {
-                if (entry.State == EntityState.Added)
-                {
-                    entry.Entity.CreatedAt = DateTime.UtcNow;
-                }
-                else if (entry.State == EntityState.Modified)
-                {
-                    entry.Entity.UpdatedAt = DateTime.UtcNow;
-                }
-            }
-
-            _logger.LogInformation("Saving changes to database at {Time}", DateTime.UtcNow);
+            ApplyAuditAndLogging();
 
             try
             {

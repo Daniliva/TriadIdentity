@@ -1,5 +1,4 @@
 ﻿using System.Linq.Expressions;
-using TriadIdentity.DAL.Entities.Identity;
 
 namespace TriadIdentity.DAL.Interfaces;
 
