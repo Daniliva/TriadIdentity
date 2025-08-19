@@ -1,5 +1,6 @@
 ﻿using TriadIdentity.BLL.Interfaces.Identity;
 using TriadIdentity.BLL.Models.Identity;
+using TriadIdentity.DAL.Entities.Common;
 using TriadIdentity.DAL.Interfaces;
 
 namespace TriadIdentity.BLL.Services.Identity

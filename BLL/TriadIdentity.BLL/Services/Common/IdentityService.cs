@@ -1,9 +1,10 @@
-﻿using AutoMapper;
+﻿using System.ComponentModel.DataAnnotations;
+using AutoMapper;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using System.ComponentModel.DataAnnotations;
 using TriadIdentity.BLL.Constants;
 using TriadIdentity.BLL.Interfaces.Common;
+using TriadIdentity.BLL.Interfaces.Identity;
 using TriadIdentity.BLL.Models.Identity;
 using TriadIdentity.DAL.Entities.Common;
 using TriadIdentity.DAL.Entities.Identity;
@@ -18,43 +19,39 @@ namespace TriadIdentity.BLL.Services.Common
         private readonly CustomRoleManager _roleManager;
         private readonly SignInManager<User> _signInManager;
         private readonly IMapper _mapper;
+        private readonly ILogService _logService;
 
         public IdentityService(
             IUnitOfWork unitOfWork,
             CustomUserManager userManager,
             CustomRoleManager roleManager,
             SignInManager<User> signInManager,
-            IMapper mapper)
+            IMapper mapper,
+            ILogService logService)
         {
             _unitOfWork = unitOfWork;
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
             _mapper = mapper;
+            _logService = logService;
         }
 
         public async Task RegisterUserAsync(RegisterUserDto dto)
         {
             ValidateDto(dto);
 
-            var user = _mapper.Map<User>(dto);
-
-            await _unitOfWork.BeginTransactionAsync();
-            try
+            await _unitOfWork.ExecuteInTransactionAsync(async () =>
             {
+                var user = _mapper.Map<User>(dto);
                 var result = await _userManager.CreateAsync(user, dto.Password);
                 if (!result.Succeeded)
                 {
                     throw new Exception(ErrorMessages.UserRegistrationFailed);
                 }
 
-                await _unitOfWork.CommitTransactionAsync();
-            }
-            catch
-            {
-                await _unitOfWork.RollbackTransactionAsync();
-                throw;
-            }
+                await _logService.LogActionAsync("UserRegistered", user.Id.ToString(), $"User {dto.Email} registered at {DateTime.UtcNow}.");
+            });
         }
 
         public async Task<string> LoginUserAsync(LoginUserDto dto)
@@ -152,10 +149,59 @@ namespace TriadIdentity.BLL.Services.Common
             }
         }
 
+        public async Task<UserDto> GetUserByIdAsync(Guid userId)
+        {
+            var user = await _unitOfWork.Repository<User>().GetByIdAsync(userId);
+            if (user == null)
+            {
+                throw new Exception(ErrorMessages.UserNotFound);
+            }
+
+            var userDto = _mapper.Map<UserDto>(user);
+            ValidateDto(userDto);
+            await _logService.LogActionAsync("UserRetrieved", userId.ToString(), $"User data retrieved for ID {userId} at {DateTime.UtcNow}.");
+            return userDto;
+        }
+
+        public async Task<UserDto> GetUserByIdAsync(string email)
+        {
+            var user = await _unitOfWork.Repository<User>().FindAsync(u => u.Email == email).Result.FirstOrDefaultAsync();
+            if (user == null)
+            {
+                throw new Exception(ErrorMessages.UserNotFound);
+            }
+
+            var userDto = _mapper.Map<UserDto>(user);
+            ValidateDto(userDto);
+            await _logService.LogActionAsync("UserRetrieved", user.Id.ToString(), $"User data retrieved for email {email} at {DateTime.UtcNow}.");
+            return userDto;
+        }
+
+        public async Task<IEnumerable<string>> GetUserRolesAsync(Guid userId)
+        {
+            var user = await _unitOfWork.Repository<User>().GetByIdAsync(userId);
+            if (user == null)
+            {
+                throw new Exception(ErrorMessages.UserNotFound);
+            }
+
+            var roles = await _userManager.GetRolesAsync(user);
+            await _logService.LogActionAsync("RolesRetrieved", userId.ToString(), $"Roles retrieved for user {user.Email} at {DateTime.UtcNow}.");
+            return roles;
+        }
+
+        public async Task<IEnumerable<LogEntryDto>> GetUserLogsAsync(string userId)
+        {
+            var logs = await _logService.GetLogsByUserIdAsync(userId);
+            await _logService.LogActionAsync("LogsRetrieved", userId, $"Logs retrieved for user at {DateTime.UtcNow}.");
+            return logs;
+        }
+
         private void ValidateDto<T>(T dto)
         {
             var context = new ValidationContext(dto);
             Validator.ValidateObject(dto, context, validateAllProperties: true);
         }
     }
+
 }

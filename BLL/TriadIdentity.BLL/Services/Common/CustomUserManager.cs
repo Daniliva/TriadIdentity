@@ -1,8 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using TriadIdentity.DAL.Entities.Common;
 using TriadIdentity.DAL.Entities.Identity;
 using TriadIdentity.DAL.Interfaces;
+
 
 namespace TriadIdentity.BLL.Services.Common
 {
@@ -15,7 +17,7 @@ namespace TriadIdentity.BLL.Services.Common
             IOptions<IdentityOptions> optionsAccessor,
             IPasswordHasher<User> passwordHasher,
             IUserValidator<User>[] userValidators,
-            IPasswordValidator<User> passwordValidator,
+            IEnumerable<IPasswordValidator<User>> passwordValidator,
             ILookupNormalizer keyNormalizer,
             IdentityErrorDescriber errors,
             IServiceProvider services,
