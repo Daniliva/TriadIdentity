@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Storage;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage;
 using TriadIdentity.DAL.Contexts;
 using TriadIdentity.DAL.Interfaces;
 
@@ -55,6 +56,26 @@ public class UnitOfWork : IUnitOfWork
             _transaction.Dispose();
             _transaction = null;
         }
+    }
+
+    // Новый метод: Оборачивает действие в execution strategy для поддержки повторных попыток
+    public async Task ExecuteInTransactionAsync(Func<Task> action)
+    {
+        var strategy = _context.Database.CreateExecutionStrategy();
+        await strategy.ExecuteAsync(async () =>
+        {
+            await using var transaction = await _context.Database.BeginTransactionAsync();
+            try
+            {
+                await action();
+                await transaction.CommitAsync();
+            }
+            catch
+            {
+                await transaction.RollbackAsync();
+                throw;
+            }
+        });
     }
 
     public void Dispose()

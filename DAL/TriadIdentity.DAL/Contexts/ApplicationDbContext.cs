@@ -4,7 +4,7 @@ using Microsoft.Extensions.Logging;
 using TriadIdentity.DAL.Entities.Common;
 using TriadIdentity.DAL.Entities.Identity;
 using TriadIdentity.DAL.Interfaces;
-
+ 
 namespace TriadIdentity.DAL.Contexts
 {
     public class ApplicationDbContext : IdentityDbContext<User, Role, Guid, UserClaim, UserRole, UserLogin, RoleClaim, UserToken>, IApplicationDbContext
@@ -41,7 +41,9 @@ namespace TriadIdentity.DAL.Contexts
 
         private void ApplyAuditAndLogging()
         {
-            foreach (var entry in ChangeTracker.Entries<IAuditEntity>())
+            var logsToAdd = new List<LogEntry>();
+
+            foreach (var entry in ChangeTracker.Entries<IAuditEntity>().ToList()) // делаем snapshot
             {
                 if (entry.State == EntityState.Added)
                 {
@@ -60,7 +62,7 @@ namespace TriadIdentity.DAL.Contexts
                         ? $"User {u.Email} {entry.State} at {DateTime.UtcNow}"
                         : $"{entityType} {entry.State} at {DateTime.UtcNow}";
 
-                    LogEntries.Add(new LogEntry
+                    logsToAdd.Add(new LogEntry
                     {
                         Action = $"{entityType}_{entry.State}",
                         UserId = userId,
@@ -71,7 +73,14 @@ namespace TriadIdentity.DAL.Contexts
                         entityType, entry.State, DateTime.UtcNow);
                 }
             }
+
+            // Добавляем логи уже после обхода
+            if (logsToAdd.Any())
+            {
+                LogEntries.AddRange(logsToAdd);
+            }
         }
+
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = default)
         {
