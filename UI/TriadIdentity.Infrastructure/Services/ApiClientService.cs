@@ -35,5 +35,15 @@ namespace TriadIdentity.Infrastructure.Services
         {
             return await _httpClient.GetFromJsonAsync<UpdateUserDto>($"api/identity/profile/{userId}");
         }
+
+        public async Task<IEnumerable<string>> GetUserRolesAsync(Guid userId)
+        {
+            return await _httpClient.GetFromJsonAsync<IEnumerable<string>>($"api/identity/roles/{userId}");
+        }
+
+        public async Task<IEnumerable<LogEntryDto>> GetUserLogsAsync(string userId)
+        {
+            return await _httpClient.GetFromJsonAsync<IEnumerable<LogEntryDto>>($"api/identity/logs/{userId}");
+        }
     }
 }

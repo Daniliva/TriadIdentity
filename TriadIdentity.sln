@@ -19,6 +19,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriadIdentity.BLL", "BLL\Tr
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriadIdentity.Infrastructure", "UI\TriadIdentity.Infrastructure\TriadIdentity.Infrastructure.csproj", "{F9210EDC-E170-4F39-9BA8-B1717CFB779C}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TriadIdentity.UI.Api", "UI\Backend\TriadIdentity.UI.Api\TriadIdentity.UI.Api.csproj", "{00856E85-E5D7-4080-9CA3-B9EBF046662A}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -37,6 +39,10 @@ Global
 		{F9210EDC-E170-4F39-9BA8-B1717CFB779C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F9210EDC-E170-4F39-9BA8-B1717CFB779C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F9210EDC-E170-4F39-9BA8-B1717CFB779C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00856E85-E5D7-4080-9CA3-B9EBF046662A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00856E85-E5D7-4080-9CA3-B9EBF046662A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00856E85-E5D7-4080-9CA3-B9EBF046662A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00856E85-E5D7-4080-9CA3-B9EBF046662A}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -47,6 +53,7 @@ Global
 		{840F99D1-7A3E-405B-AEB5-CCC5CF147654} = {2B4641EE-62F4-44DE-9263-1E6EB2434FCC}
 		{56C3C4A6-CCAC-47F0-881B-A4EB96461AEB} = {17EAB5B2-2681-4CCD-8C46-7730B14F09A8}
 		{F9210EDC-E170-4F39-9BA8-B1717CFB779C} = {02EA681E-C7D8-13C7-8484-4AC65E1B71E8}
+		{00856E85-E5D7-4080-9CA3-B9EBF046662A} = {0F3CF2F0-1B72-4D38-9308-F88A5C5B8847}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {B07D4C57-DFBA-4252-AF8D-0FDE817DB46E}
