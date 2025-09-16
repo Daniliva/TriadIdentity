@@ -43,7 +43,7 @@ namespace TriadIdentity.DAL.Contexts
         {
             var logsToAdd = new List<LogEntry>();
 
-            foreach (var entry in ChangeTracker.Entries<IAuditEntity>().ToList()) // делаем snapshot
+            foreach (var entry in ChangeTracker.Entries<IAuditEntity>().ToList())
             {
                 if (entry.State == EntityState.Added)
                 {
@@ -74,7 +74,6 @@ namespace TriadIdentity.DAL.Contexts
                 }
             }
 
-            // Добавляем логи уже после обхода
             if (logsToAdd.Any())
             {
                 LogEntries.AddRange(logsToAdd);

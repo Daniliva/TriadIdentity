@@ -38,10 +38,9 @@ namespace TriadIdentity.DAL.Extensions
             services.AddScoped<IRoleValidator<Role>, RoleValidator<Role>>();
 
             services.AddScoped<IUserValidator<User>[]>(provider =>
-                new[] { provider.GetService<IUserValidator<User>>() });
+                new[] { provider.GetService<IUserValidator<User>>() }!);
             services.AddScoped<IRoleValidator<Role>[]>(provider =>
-                new[] { provider.GetService<IRoleValidator<Role>>() });
-
+                new[] { provider.GetService<IRoleValidator<Role>>() }!);
             return services;
         }
     }
