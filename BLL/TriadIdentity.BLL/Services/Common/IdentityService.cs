@@ -1,10 +1,10 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
-using TriadIdentity.BLL.Constants;
 using TriadIdentity.BLL.Interfaces.Common;
 using TriadIdentity.BLL.Interfaces.Identity;
-using TriadIdentity.BLL.Models.Identity;
+using TriadIdentity.BLL.Models.Constants;
+using TriadIdentity.BLL.Models.DTOs.Identity;
 using TriadIdentity.DAL.Entities.Common;
 using TriadIdentity.DAL.Entities.Identity;
 using TriadIdentity.DAL.Interfaces;

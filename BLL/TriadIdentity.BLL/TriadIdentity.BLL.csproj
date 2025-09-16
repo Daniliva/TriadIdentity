@@ -9,15 +9,9 @@
 
 
   <ItemGroup>
-	  <Folder Include="Interfaces\Identity\" />
-  </ItemGroup>
-
-
-
-  <ItemGroup>
     <PackageReference Include="AutoMapper" Version="15.0.1" />
-    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.8" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="9.0.9" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.9" />
     <PackageReference Include="System.ComponentModel.Annotations" Version="5.0.0" />
   </ItemGroup>
 
@@ -25,6 +19,8 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\DAL\TriadIdentity.DAL\TriadIdentity.DAL.csproj" />
+    <ProjectReference Include="..\TriadIdentity.BLL.Interfaces\TriadIdentity.BLL.Interfaces.csproj" />
+    <ProjectReference Include="..\TriadIdentity.BLL.Models\TriadIdentity.BLL.Models.csproj" />
   </ItemGroup>
 
 </Project>

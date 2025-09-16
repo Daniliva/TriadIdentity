@@ -4,9 +4,9 @@ using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using TriadIdentity.BLL.Constants;
 using TriadIdentity.BLL.Interfaces.Common;
-using TriadIdentity.BLL.Models.Identity;
+using TriadIdentity.BLL.Models.Constants;
+using TriadIdentity.BLL.Models.DTOs.Identity;
 using TriadIdentity.UI.Api.Models;
 
 namespace TriadIdentity.UI.Api.Controllers
