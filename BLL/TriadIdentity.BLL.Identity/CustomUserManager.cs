@@ -5,8 +5,7 @@ using TriadIdentity.DAL.Entities.Common;
 using TriadIdentity.DAL.Entities.Identity;
 using TriadIdentity.DAL.Interfaces;
 
-
-namespace TriadIdentity.BLL.Services.Common
+namespace TriadIdentity.BLL.Identity
 {
     public class CustomUserManager : UserManager<User>
     {

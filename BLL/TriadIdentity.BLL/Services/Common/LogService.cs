@@ -3,7 +3,7 @@ using TriadIdentity.BLL.Models.DTOs.Identity;
 using TriadIdentity.DAL.Entities.Common;
 using TriadIdentity.DAL.Interfaces;
 
-namespace TriadIdentity.BLL.Services.Identity
+namespace TriadIdentity.BLL.Services.Common
 {
     public class LogService : ILogService
     {

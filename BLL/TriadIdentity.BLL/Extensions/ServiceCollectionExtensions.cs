@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using TriadIdentity.BLL.Identity;
 using TriadIdentity.BLL.Interfaces.Common;
 using TriadIdentity.BLL.Interfaces.Identity;
 using TriadIdentity.BLL.Profiles;

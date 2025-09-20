@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using TriadIdentity.DAL.Interfaces;
+using TriadIdentity.DAL.Entities.Common;
 
 namespace TriadIdentity.DAL.Entities.Identity
 {

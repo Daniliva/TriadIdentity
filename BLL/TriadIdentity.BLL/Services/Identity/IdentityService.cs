@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using AutoMapper;
 using Microsoft.AspNetCore.Identity;
+using TriadIdentity.BLL.Identity;
 using TriadIdentity.BLL.Interfaces.Common;
 using TriadIdentity.BLL.Interfaces.Identity;
 using TriadIdentity.BLL.Models.Constants;
@@ -9,7 +10,7 @@ using TriadIdentity.DAL.Entities.Common;
 using TriadIdentity.DAL.Entities.Identity;
 using TriadIdentity.DAL.Interfaces;
 
-    namespace TriadIdentity.BLL.Services.Common
+namespace TriadIdentity.BLL.Services.Identity
     {
         public class IdentityService : IIdentityService
         {

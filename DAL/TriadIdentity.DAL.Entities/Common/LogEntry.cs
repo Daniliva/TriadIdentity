@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using TriadIdentity.DAL.Interfaces;
 
 namespace TriadIdentity.DAL.Entities.Common
 {

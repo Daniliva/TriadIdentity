@@ -1,4 +1,4 @@
-﻿namespace TriadIdentity.DAL.Interfaces
+﻿namespace TriadIdentity.DAL.Entities.Common
 {
     public interface IAuditEntity
     {

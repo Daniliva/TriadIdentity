@@ -19,6 +19,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\DAL\TriadIdentity.DAL\TriadIdentity.DAL.csproj" />
+    <ProjectReference Include="..\TriadIdentity.BLL.Identity\TriadIdentity.BLL.Identity.csproj" />
     <ProjectReference Include="..\TriadIdentity.BLL.Interfaces\TriadIdentity.BLL.Interfaces.csproj" />
     <ProjectReference Include="..\TriadIdentity.BLL.Models\TriadIdentity.BLL.Models.csproj" />
   </ItemGroup>
