@@ -1,4 +1,5 @@
 ﻿using TriadIdentity.BLL.Interfaces.Identity;
+using TriadIdentity.BLL.Models.DTOs.Common;
 using TriadIdentity.BLL.Models.DTOs.Identity;
 using TriadIdentity.DAL.Entities.Common;
 using TriadIdentity.DAL.Interfaces;

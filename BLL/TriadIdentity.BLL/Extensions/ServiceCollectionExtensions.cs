@@ -8,6 +8,7 @@ using TriadIdentity.BLL.Services.Common;
 using TriadIdentity.BLL.Services.Identity;
 using TriadIdentity.DAL.Entities.Identity;
 using TriadIdentity.DAL.Extensions;
+using ILogService = TriadIdentity.BLL.Interfaces.Identity.ILogService;
 
 namespace TriadIdentity.BLL.Extensions
 {

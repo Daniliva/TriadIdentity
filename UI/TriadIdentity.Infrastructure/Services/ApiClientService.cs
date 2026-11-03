@@ -1,4 +1,5 @@
 ﻿using System.Net.Http.Json;
+using TriadIdentity.BLL.Models.DTOs.Common;
 using TriadIdentity.BLL.Models.DTOs.Identity;
 
 namespace TriadIdentity.Infrastructure.Services

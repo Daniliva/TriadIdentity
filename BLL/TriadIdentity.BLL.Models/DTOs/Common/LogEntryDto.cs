@@ -1,4 +1,4 @@
-﻿namespace TriadIdentity.BLL.Models.DTOs.Identity
+﻿namespace TriadIdentity.BLL.Models.DTOs.Common
 {
     public class LogEntryDto
     {

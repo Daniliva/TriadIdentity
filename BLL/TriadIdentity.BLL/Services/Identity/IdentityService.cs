@@ -5,10 +5,12 @@ using TriadIdentity.BLL.Identity;
 using TriadIdentity.BLL.Interfaces.Common;
 using TriadIdentity.BLL.Interfaces.Identity;
 using TriadIdentity.BLL.Models.Constants;
+using TriadIdentity.BLL.Models.DTOs.Common;
 using TriadIdentity.BLL.Models.DTOs.Identity;
 using TriadIdentity.DAL.Entities.Common;
 using TriadIdentity.DAL.Entities.Identity;
 using TriadIdentity.DAL.Interfaces;
+using ILogService = TriadIdentity.BLL.Interfaces.Identity.ILogService;
 
 namespace TriadIdentity.BLL.Services.Identity
     {
