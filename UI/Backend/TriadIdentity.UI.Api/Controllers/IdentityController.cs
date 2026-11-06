@@ -1,5 +1,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
@@ -7,6 +8,7 @@ using System.Text;
 using TriadIdentity.BLL.Interfaces.Common;
 using TriadIdentity.BLL.Models.DTOs.Identity;
 using TriadIdentity.UI.Api.Models;
+using TriadIdentity.UI.Api.Options;
 
 namespace TriadIdentity.UI.Api.Controllers
 {
@@ -16,11 +18,12 @@ namespace TriadIdentity.UI.Api.Controllers
     {
         private readonly IIdentityService _identityService;
         private readonly IConfiguration _configuration;
+        private readonly JwtOptions _jwt;
 
-        public IdentityController(IIdentityService identityService, IConfiguration configuration)
+        public IdentityController(IIdentityService identityService, IOptions<JwtOptions> jwt)
         {
             _identityService = identityService;
-            _configuration = configuration;
+            _jwt = jwt.Value;
         }
 
         [HttpPost("register")]
@@ -35,12 +38,12 @@ namespace TriadIdentity.UI.Api.Controllers
         {
             var userId = await _identityService.LoginUserAsync(dto);
             var user = await _identityService.GetUserByIdAsync(userId);
-            
+           
             var token = GenerateJwtToken(user);
             return Ok(new TokenResponse
             {
                 Token = token,
-                Expires = DateTime.UtcNow.AddHours(1)
+                Expires = DateTime.UtcNow.AddMinutes(_jwt.ExpiryMinutes)
             });
         }
 
@@ -97,13 +100,13 @@ namespace TriadIdentity.UI.Api.Controllers
                 new Claim(ClaimTypes.Name, $"{user.FirstName} {user.LastName}")
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwt.Key));
             var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
             var token = new JwtSecurityToken(
-                issuer: _configuration["Jwt:Issuer"],
-                audience: _configuration["Jwt:Audience"],
+                issuer: _jwt.Issuer,
+                audience: _jwt.Audience,
                 claims: claims,
-                expires: DateTime.UtcNow.AddHours(1),
+                expires: DateTime.UtcNow.AddMinutes(_jwt.ExpiryMinutes),
                 signingCredentials: creds);
 
             return new JwtSecurityTokenHandler().WriteToken(token);

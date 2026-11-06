@@ -73,6 +73,43 @@
 
 ---
 
+# Использование как шаблона
+
+## Новый проект
+
+Один раз установить шаблон из корня этого репозитория:
+
+```bash
+dotnet new install .
+```
+
+Создать проект (имя без дефисов и пробелов, оно станет namespace):
+
+```bash
+dotnet new triadidentity -n MyProject
+```
+
+Затем в папке нового проекта:
+
+```bash
+powershell -ExecutionPolicy Bypass -File scripts/init-secrets.ps1
+dotnet ef database update --project DAL/MyProject.DAL --startup-project UI/Backend/MyProject.UI.Api
+dotnet run --project UI/Backend/MyProject.UI.Api
+```
+
+## Настройки JWT
+
+| Параметр | Где хранится | Секрет |
+|---|---|---|
+| `Jwt:Key` | user-secrets, на сервере `Jwt__Key` | Да |
+| `Jwt:Issuer`, `Jwt:Audience` | `appsettings.json` | Нет |
+| `Jwt:ExpiryMinutes` | `appsettings.json` | Нет |
+
+Ключ должен быть не короче 32 символов и свой для каждого проекта и окружения.
+Без него приложение не запустится. Никогда не коммитьте ключ в репозиторий.
+
+---
+
 # Переход на .NET 10 (LTS)
 
 **Зачем:** поддержка .NET 9 (STS) заканчивается около 10.11.2026. .NET 10 — LTS. SDK 10.0.403 уже установлен.

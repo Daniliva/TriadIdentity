@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using TriadIdentity.UI.Api.Options;
 
 namespace TriadIdentity.UI.Api.Extensions
 {
@@ -8,6 +9,13 @@ public static class ServiceCollectionExtensions
     {
         public static IServiceCollection AddApiServices(this IServiceCollection services, IConfiguration configuration)
         {
+            var section = configuration.GetSection(JwtOptions.SectionName);
+            services.AddOptions<JwtOptions>()
+                .Bind(section)
+                .ValidateDataAnnotations()
+                .ValidateOnStart();
+
+            var jwt = section.Get<JwtOptions>() ?? new JwtOptions();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -20,9 +28,9 @@ public static class ServiceCollectionExtensions
                     ValidateAudience = true,
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
-                    ValidIssuer = configuration["Jwt:Issuer"],
-                    ValidAudience = configuration["Jwt:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:Key"]!))
+                    ValidIssuer = jwt.Issuer,
+                    ValidAudience = jwt.Audience,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwt.Key))
                 };
             });
 
