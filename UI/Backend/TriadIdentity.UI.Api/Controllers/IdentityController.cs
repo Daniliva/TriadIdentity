@@ -5,9 +5,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using TriadIdentity.BLL.Interfaces.Common;
-using TriadIdentity.BLL.Models.Constants;
 using TriadIdentity.BLL.Models.DTOs.Identity;
-using TriadIdentity.BLL.Services.Identity;
 using TriadIdentity.UI.Api.Models;
 
 namespace TriadIdentity.UI.Api.Controllers
@@ -30,7 +28,6 @@ namespace TriadIdentity.UI.Api.Controllers
         {
             await _identityService.RegisterUserAsync(dto);
             return Ok("User registered successfully.");
-            
         }
 
         [HttpPost("login")]
@@ -45,7 +42,6 @@ namespace TriadIdentity.UI.Api.Controllers
                 Token = token,
                 Expires = DateTime.UtcNow.AddHours(1)
             });
-            
         }
 
         [Authorize]
@@ -55,13 +51,12 @@ namespace TriadIdentity.UI.Api.Controllers
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             if (dto.Id != userId)
             {
-                return Unauthorized("You can only update your own profile.");
+                return Forbid();
 
             }
 
             await _identityService.UpdateUserAsync(dto);
             return Ok("User updated successfully.");
-            
         }
 
         [Authorize]
@@ -70,30 +65,17 @@ namespace TriadIdentity.UI.Api.Controllers
         {
             var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
             var user = await _identityService.GetUserByIdAsync(userId);
-            if (user == null)
-            {
-                return NotFound(ErrorMessages.UserNotFound);
-
-            }
             
             return Ok(user);
-            
         }
 
         [Authorize]
         [HttpGet("roles")]
         public async Task<IActionResult> GetRoles()
         {
-            try
-            {
-                var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                var roles = await _identityService.GetUserRolesAsync(userId);
-                return Ok(roles);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var roles = await _identityService.GetUserRolesAsync(userId);
+            return Ok(roles);
         }
 
         [Authorize]
