@@ -24,6 +24,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\..\..\BLL\TriadIdentity.BLL\TriadIdentity.BLL.csproj" />
+    <ProjectReference Include="..\..\TriadIdentity.ServiceDefaults\TriadIdentity.ServiceDefaults.csproj" />
   </ItemGroup>
 
 </Project>

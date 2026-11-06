@@ -7,7 +7,7 @@
   "shortName": "triadidentity",
   "sourceName": "TriadIdentity",
   "preferNameDirectory": true,
-  "guids": ["77661a19-c81f-4b7b-9f3b-7e793c7901ce"],
+  "guids": ["77661a19-c81f-4b7b-9f3b-7e793c7901ce", "f19b6326-3b1a-4742-a5ac-c1e95b5db121"],
   "tags": { "language": "C#", "type": "solution" },
   "sources": [
     {

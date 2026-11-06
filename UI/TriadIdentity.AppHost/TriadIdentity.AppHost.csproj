@@ -1,0 +1,20 @@
+<Project Sdk="Aspire.AppHost.Sdk/13.6.4">
+
+  <ItemGroup>
+    <ProjectReference Include="..\Backend\TriadIdentity.UI.Api\TriadIdentity.UI.Api.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Aspire.Hosting.SqlServer" Version="13.6.4" />
+  </ItemGroup>
+
+  <PropertyGroup>
+    <OutputType>Exe</OutputType>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AspireUseCliBundle>true</AspireUseCliBundle>
+    <UserSecretsId>f19b6326-3b1a-4742-a5ac-c1e95b5db121</UserSecretsId>
+  </PropertyGroup>
+
+</Project>

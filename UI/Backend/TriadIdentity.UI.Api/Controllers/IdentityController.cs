@@ -17,7 +17,6 @@ namespace TriadIdentity.UI.Api.Controllers
     public class IdentityController : ControllerBase
     {
         private readonly IIdentityService _identityService;
-        private readonly IConfiguration _configuration;
         private readonly JwtOptions _jwt;
 
         public IdentityController(IIdentityService identityService, IOptions<JwtOptions> jwt)
