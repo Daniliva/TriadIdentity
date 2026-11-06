@@ -1,6 +1,7 @@
 using Microsoft.OpenApi.Models;
 using TriadIdentity.BLL.Extensions;
 using TriadIdentity.UI.Api.Extensions;
+using TriadIdentity.UI.Api.Middleware;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -42,9 +43,11 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 
 
 builder.Services.AddBusinessLogicLayer(connectionString);
+builder.Services.AddExceptionHandler<GlobalExceptionHandler>();
+builder.Services.AddProblemDetails();
 
 var app = builder.Build();
-
+app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
@@ -52,7 +55,7 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI(c =>
     {
         c.SwaggerEndpoint("/swagger/v1/swagger.json", "TriadIdentity API v1");
-        c.RoutePrefix = string.Empty; // Makes Swagger UI available at the root URL (e.g., http://localhost:44387/)
+        c.RoutePrefix = string.Empty;
     });
 }
 app.UseHttpsRedirection();

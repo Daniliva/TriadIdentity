@@ -7,6 +7,7 @@ using System.Text;
 using TriadIdentity.BLL.Interfaces.Common;
 using TriadIdentity.BLL.Models.Constants;
 using TriadIdentity.BLL.Models.DTOs.Identity;
+using TriadIdentity.BLL.Services.Identity;
 using TriadIdentity.UI.Api.Models;
 
 namespace TriadIdentity.UI.Api.Controllers
@@ -27,82 +28,56 @@ namespace TriadIdentity.UI.Api.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterUserDto dto)
         {
-            try
-            {
-                await _identityService.RegisterUserAsync(dto);
-                return Ok("User registered successfully.");
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            await _identityService.RegisterUserAsync(dto);
+            return Ok("User registered successfully.");
+            
         }
 
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginUserDto dto)
         {
-            try
+            var userId = await _identityService.LoginUserAsync(dto);
+            var user = await _identityService.GetUserByIdAsync(userId);
+            
+            var token = GenerateJwtToken(user);
+            return Ok(new TokenResponse
             {
-                var result = await _identityService.LoginUserAsync(dto);
-                var user = await _identityService.GetUserByIdAsync(dto.Email);
-                if (user == null)
-                {
-                    return BadRequest(ErrorMessages.InvalidCredentials);
-                }
-
-                var token = GenerateJwtToken(user);
-                return Ok(new TokenResponse
-                {
-                    Token = token,
-                    Expires = DateTime.UtcNow.AddHours(1)
-                });
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+                Token = token,
+                Expires = DateTime.UtcNow.AddHours(1)
+            });
+            
         }
 
         [Authorize]
         [HttpPut("update")]
         public async Task<IActionResult> Update([FromBody] UpdateUserDto dto)
         {
-            try
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (dto.Id != userId)
             {
-                var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                if (dto.Id != userId)
-                {
-                    return Unauthorized("You can only update your own profile.");
-                }
+                return Unauthorized("You can only update your own profile.");
 
-                await _identityService.UpdateUserAsync(dto);
-                return Ok("User updated successfully.");
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+
+            await _identityService.UpdateUserAsync(dto);
+            return Ok("User updated successfully.");
+            
         }
 
         [Authorize]
         [HttpGet("profile")]
         public async Task<IActionResult> GetProfile()
         {
-            try
+            var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            var user = await _identityService.GetUserByIdAsync(userId);
+            if (user == null)
             {
-                var userId = Guid.Parse(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-                var user = await _identityService.GetUserByIdAsync(userId);
-                if (user == null)
-                {
-                    return NotFound(ErrorMessages.UserNotFound);
-                }
+                return NotFound(ErrorMessages.UserNotFound);
 
-                return Ok(user);
             }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            
+            return Ok(user);
+            
         }
 
         [Authorize]
@@ -125,16 +100,10 @@ namespace TriadIdentity.UI.Api.Controllers
         [HttpGet("logs")]
         public async Task<IActionResult> GetLogs()
         {
-            try
-            {
-                var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-                var logs = await _identityService.GetUserLogsAsync(userId);
-                return Ok(logs);
-            }
-            catch (Exception ex)
-            {
-                return BadRequest(ex.Message);
-            }
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            var logs = await _identityService.GetUserLogsAsync(userId);
+            return Ok(logs);
+            
         }
 
         private string GenerateJwtToken(UserDto user)
