@@ -1,5 +1,7 @@
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi;
 using TriadIdentity.BLL.Extensions;
+using TriadIdentity.DAL.Contexts;
 using TriadIdentity.UI.Api.Extensions;
 using TriadIdentity.UI.Api.Middleware;
 
@@ -18,7 +20,7 @@ builder.Services.AddSwaggerGen(c =>
         In = ParameterLocation.Header,
         Description = "Please enter JWT with Bearer into field",
         Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey,
+        Type = SecuritySchemeType.Http,
         Scheme = "Bearer"
     });
     c.AddSecurityRequirement(document => new OpenApiSecurityRequirement
@@ -41,6 +43,9 @@ app.UseExceptionHandler();
 
 if (app.Environment.IsDevelopment())
 {
+    using var scope = app.Services.CreateScope();
+    var db = scope.ServiceProvider.GetRequiredService<ApplicationDbContext>();
+    await db.Database.MigrateAsync();
     app.UseSwagger();
     app.UseSwaggerUI(c =>
     {
