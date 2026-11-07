@@ -16,10 +16,11 @@
 | UI | `TriadIdentity.UI.Api` | Web API, JWT, Swagger |
 | UI | `TriadIdentity.Infrastructure` | HTTP-клиент к API (`ApiClientService`) |
 
-## Текущее состояние (2026-10-29)
+## Текущее состояние (2026-11-08)
 
 - Сборка проходит, уязвимых NuGet-пакетов нет.
-- Пакеты обновлены до последних патчей .NET 9 (9.0.22), AutoMapper 15.1.3.
+- .NET 10, пакеты `Microsoft.*` 10.0.14, Swashbuckle 10.3.1, AutoMapper 15.1.3.
+- Работает без Aspire, с Aspire и в Docker.
 - Удалены устаревшие пакеты: `SwaggerUi 1.1.0`, `Microsoft.AspNetCore.Identity 2.x`, `Microsoft.AspNetCore.Http.Extensions 2.x`.
 - Рефакторинг `IdentityService` → `IAuthService` / `IUserService` / `IRoleService` / `IClaimService` начат, но не закончен.
 - Известные баги: см. этап 2.
@@ -55,13 +56,13 @@
 - [ ] Убрать предупреждения nullable (CS8618): `required` или `= null!` в DTO и сущностях.
 
 ## Этап 4. Бэкенд для продакшна
-- [ ] Переход на .NET 10 (см. раздел ниже).
+- [x] Переход на .NET 10 (см. раздел ниже).
 - [ ] Refresh-токены: таблица `RefreshTokens`, `/refresh`, `/logout`, миграция.
 - [ ] Пагинация для `/logs`.
 - [ ] `/health`, Serilog.
-- [ ] Оркестрация для локального запуска: .NET Aspire (см. раздел ниже) или docker-compose.
+- [x] Оркестрация для локального запуска: .NET Aspire (см. раздел ниже).
 - [ ] Тесты: `TriadIdentity.Tests` (xUnit), юнит-тесты сервисов, интеграционные через `WebApplicationFactory`.
-- [ ] README: запуск, миграции, переменные окружения.
+- [x] README: запуск, миграции, переменные окружения.
 
 ## Этап 5. Новые фичи
 - [ ] Подтверждение email.
@@ -70,6 +71,51 @@
 - [ ] 2FA (TOTP).
 - [ ] Внешний вход (Google / Microsoft) — `ExternalLoginAsync`.
 - [ ] Версионирование API (`/api/v1`).
+
+---
+
+# Запуск
+
+Требуется .NET SDK 10. Один раз создать секреты:
+
+```bash
+powershell -ExecutionPolicy Bypass -File scripts/init-secrets.ps1
+```
+
+## Без Aspire (Windows, LocalDB)
+
+```bash
+dotnet run --project UI/Backend/TriadIdentity.UI.Api
+```
+
+В Development миграции применяются при старте. Swagger: `https://localhost:<порт>/swagger`.
+
+## С Aspire (нужен Docker Desktop)
+
+```bash
+dotnet run --project UI/TriadIdentity.AppHost
+```
+
+SQL Server поднимается в контейнере, строка подключения и `Jwt__Key` передаются в API автоматически. Ссылка на дашборд выводится в консоль.
+
+## Docker
+
+Из корня репозитория:
+
+```bash
+docker build -f UI/Backend/TriadIdentity.UI.Api/Dockerfile -t triadidentity:local .
+docker run --rm -p 8080:8080 -e Jwt__Key="<ключ не короче 32 символов>" -e ConnectionStrings__DefaultConnection="<строка подключения>" triadidentity:local
+```
+
+Без `Jwt__Key` контейнер не стартует. В контейнере LocalDB недоступна, нужен внешний SQL Server. Миграции в контейнере (Production) при старте не применяются.
+
+## Переменные окружения
+
+| Переменная | Назначение |
+|---|---|
+| `Jwt__Key` | Ключ подписи JWT, обязателен |
+| `ConnectionStrings__DefaultConnection` | Строка подключения к SQL Server |
+| `ASPNETCORE_ENVIRONMENT` | `Development` включает Swagger и миграции при старте |
 
 ---
 
