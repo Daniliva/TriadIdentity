@@ -12,9 +12,8 @@ EXPOSE 8081
 FROM mcr.microsoft.com/dotnet/sdk:10.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
-COPY ["UI/Backend/TriadIdentity.UI.Api/TriadIdentity.UI.Api.csproj", "UI/Backend/TriadIdentity.UI.Api/"]
-RUN dotnet restore "./UI/Backend/TriadIdentity.UI.Api/TriadIdentity.UI.Api.csproj"
 COPY . .
+RUN dotnet restore "./UI/Backend/TriadIdentity.UI.Api/TriadIdentity.UI.Api.csproj"
 WORKDIR "/src/UI/Backend/TriadIdentity.UI.Api"
 RUN dotnet build "./TriadIdentity.UI.Api.csproj" -c $BUILD_CONFIGURATION -o /app/build
 
