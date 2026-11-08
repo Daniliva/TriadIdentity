@@ -76,10 +76,18 @@
 
 # Запуск
 
-Требуется .NET SDK 10. Один раз создать секреты:
+Требуется .NET SDK 10. Один раз создать секреты.
+
+Windows:
 
 ```bash
 powershell -ExecutionPolicy Bypass -File scripts/init-secrets.ps1
+```
+
+Linux / macOS:
+
+```bash
+./scripts/init-secrets.sh
 ```
 
 ## Без Aspire (Windows, LocalDB)
